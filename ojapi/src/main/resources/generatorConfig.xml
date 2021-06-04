@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+
+    <classPathEntry location="E:\mysql-connector-java-5.1.49.jar"/>
+    <context id="tables" targetRuntime="MyBatis3">
+        <!--去掉注解-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!--配置的数据库信息-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://124.70.23.15:3306/jol?useSSL=false"
+                        userId="root"
+                        password="8888">
+            <property name="nullCatalogMeansCurrent" value="true" />
+        </jdbcConnection>
+
+        <!-- 这里指定javaBean实体类model的生成位置属性等，是按照数据库中表来生成 -->
+        <javaModelGenerator targetPackage="com.oj.DAO.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="false" />
+        </javaModelGenerator>
+        <!-- 指定sql映射文件生成的位置 xml文件-->
+        <sqlMapGenerator  targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+
+        <!-- 指定dao接口生成位置，mapper接口 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.oj.DAO"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!-- table指定每一个表生成策略 -->
+        <table  tableName="users" domainObjectName="Users"
+                enableCountByExample="false"
+                enableUpdateByExample="false"
+                enableDeleteByExample="false"
+                enableSelectByExample="false"
+        >
+<!--            &lt;!&ndash;把数据库的text转String&ndash;&gt;-->
+<!--            <columnOverride column="description" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--            <columnOverride column="input" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--            <columnOverride column="output" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--            <columnOverride column="sample_input" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--            <columnOverride column="sample_output" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--            <columnOverride column="hint" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+
+        </table>
+    </context>
+</generatorConfiguration>

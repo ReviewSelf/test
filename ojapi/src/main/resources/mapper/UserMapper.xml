@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oj.DAO.UserMapper">
+  <resultMap id="BaseResultMap" type="com.oj.DAO.model.User">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="integral" jdbcType="INTEGER" property="integral" />
+    <result column="rank" jdbcType="VARCHAR" property="rank" />
+    <association property="users" javaType="com.oj.DAO.model.Users" >
+      <!-- id:声明主键，表示 college_id 是关联查询对象的唯一标识-->
+      <id column="user_id" jdbcType="VARCHAR" property="userId" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="submit" jdbcType="INTEGER" property="submit" />
+      <result column="solved" jdbcType="INTEGER" property="solved" />
+      <result column="defunct" jdbcType="CHAR" property="defunct" />
+      <result column="password" jdbcType="VARCHAR" property="password" />
+      <result column="ip" jdbcType="VARCHAR" property="ip" />
+      <!--><result column="accesstime" jdbcType="TIMESTAMP" property="accesstime" />-->
+      <result column="volume" jdbcType="INTEGER" property="volume" />
+      <result column="language" jdbcType="INTEGER" property="language" />
+      <result column="reg_time" jdbcType="TIMESTAMP" property="regTime" />
+      <result column="nick" jdbcType="VARCHAR" property="nick" />
+      <result column="school" jdbcType="VARCHAR" property="school" />
+    </association>
+
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, password, category,integral,rank
+  </sql>
+
+  <select id="selectIsUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(user_id and password)
+    from user
+    where user_id = #{userId,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT user.user_id,user.category,user.integral,user.rank,users.nick,users.submit,users.solved,users.accesstime,users.school,users.email
+    from user
+    left join users
+    on user.user_id=users.user_id;
+  </select>
+
+  <select id="selectId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(user_id)
+    from user
+    where user_id=#{userId,jdbcType=VARCHAR}
+  </select >
+
+  <insert id="insertUser" parameterType="com.oj.DAO.model.User">
+    insert into user (user_id,category)
+    values (#{userId,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR})
+  </insert>
+
+  <select id="selectUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT user.user_id,user.category,user.integral,user.rank,users.nick,users.submit,users.solved,users.accesstime,users.school,users.email
+    from user
+           left join users
+                     on(user.user_id=users.user_id)
+                        where users.user_id=#{key,jdbcType=VARCHAR}
+                            or users.nick like "%"#{key,jdbcType=VARCHAR}"%"
+
+  </select>
+
+  <select id="selectLoginUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT user.user_id,user.integral,user.rank,user.category,users.nick,users.submit,users.solved,users.accesstime,users.school,users.email
+    from user
+           left join users
+                     on(user.user_id=users.user_id)
+    where users.user_id=#{userId,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updatePassword" parameterType="java.lang.String" >
+
+    update user,users
+    set user.password='123456' , users.password='TD4rZOhlgnVxSvcDi6mv5Dni8tRmMWE0'
+    where users.user_id=#{userId,jdbcType=VARCHAR } and user.user_id=users.user_id
+
+  </update>
+
+
+  <insert id="insertUsers" parameterType="com.oj.DAO.model.Users">
+    insert into users (user_id, email, submit,
+                       solved, defunct, ip, accesstime,
+                       volume, language, password,
+                       reg_time, nick, school
+    )
+    values (#{userId,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{submit,jdbcType=INTEGER},
+            #{solved,jdbcType=INTEGER}, #{defunct,jdbcType=CHAR}, #{ip,jdbcType=VARCHAR}, #{accesstime,jdbcType=TIMESTAMP},
+            #{volume,jdbcType=INTEGER}, #{language,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR},
+            #{regTime,jdbcType=TIMESTAMP}, #{nick,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}
+           )
+  </insert>
+</mapper>
